@@ -1,4 +1,5 @@
-import Deck
+from Deck import Deck
+from treys import Evaluator
 
 
 class Table:
@@ -12,14 +13,16 @@ class Table:
         self.community_cards.extend(cards)
 
     def collect_bets(self):
-        for player in self.players:
-            if player.is_active:
-                bet = min(10, player.chips)  # Mise par défaut
-                if player.bet(bet):
-                    self.pot += bet
+        #TODO
+        pass
 
     def deal_to_players(self):
         for player in self.players:
             if player.is_active:
                 player.receive_card(self.deck.draw(1)[0])
                 player.receive_card(self.deck.draw(1)[0])
+
+    def determine_winner(self):
+        #TODO
+        pass
+

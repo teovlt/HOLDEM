@@ -1,12 +1,12 @@
 import random
-import Card
+from Card import Card
 
 
 class Deck:
     def __init__(self):
         suits = ['Cœur', 'Pique', 'Carreau', 'Trèfle']
         ranks = [str(i) for i in range(2, 11)] + ['J', 'Q', 'K', 'A']
-        self.cards = [Card for rank in ranks for suit in suits]
+        self.cards = [Card(rank, suit) for rank in ranks for suit in suits]
 
     def shuffle(self):
         random.shuffle(self.cards)
