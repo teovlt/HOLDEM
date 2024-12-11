@@ -1,5 +1,3 @@
-from treys import Card
-import random
 from Table import Table
 from Player import Player
 
