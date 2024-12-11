@@ -1,4 +1,5 @@
 class Player:
+    # En faire une classe abstraite et faire une classe pour le joueur et une classe pour les Npcs
     def __init__(self, name, chips):
         self.name = name
         self.chips = chips
