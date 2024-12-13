@@ -30,6 +30,7 @@ def main():
         table.deck.shuffle()
         table.deal_to_players()
         table.community_cards = []
+        table.pot = 0
 
         # Ajouter les cartes communautaires progressivement
         while len(table.community_cards) < 5:
@@ -45,12 +46,24 @@ def main():
             # Effectuer les paris
             table.run_betting_round()
 
-        # Déterminer le gagnant de la manche
-        winner = table.has_best_hand()
-        if winner:
-            print(f"{winner.name} remporte la manche avec {winner.chips} jetons!")
-        else:
-            print("Erreur dans la détermination du gagnant.")
+            # Déterminer le gagnant de la manche
+            winners = table.has_best_hand()
+            total_pot = table.pot  # La somme totale à distribuer
+            if len(winners) == 1:
+                # Cas d'un gagnant unique
+                winner = winners[0]
+                winner.chips += total_pot
+                print(f"Le gagnant de la manche est {winner.name}, il remporte {total_pot} jetons!")
+            else:
+                # Cas de plusieurs gagnants (égalité)
+                split_pot = total_pot // len(winners)  # Répartition équitable
+                for winner in winners:
+                    winner.chips += split_pot
+                    print(f"{winner.name} partage la victoire et reçoit {split_pot} jetons.")
+                remainder = total_pot % len(winners)
+                if remainder > 0:
+                    print(
+                        f"Le reste de {remainder} jetons est conservé par la table.")
 
         # Éliminer les joueurs sans jetons
         table.remove_bankrupt_players()
