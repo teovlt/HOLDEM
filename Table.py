@@ -32,9 +32,18 @@ class Table:
     def best_hands(self):
         evaluator = Evaluator()
         evaluations = []
+
         for player in self.players:
             if player.is_active:
                 evaluation_score = evaluator.evaluate(self.community_cards, player.hand)
                 evaluations.append({"player": player, "evaluation": evaluation_score})
-        best_player = max(evaluations, key=lambda x: x["evaluation"], default=None)
-        return best_player
+
+        if not evaluations:
+            return []  
+
+        max_score = max(evaluations, key=lambda x: x["evaluation"])["evaluation"]
+
+        # Trouver tous les joueurs ayant le score maximum
+        best_players = [entry["player"] for entry in evaluations if entry["evaluation"] == max_score]
+        return best_players
+
