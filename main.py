@@ -27,6 +27,7 @@ def main():
     table.deck.shuffle()
 
     # Distribuer les cartes à chaque jouer
+    table.deal_to_players()
 
     # Plus grosse boucle qui attend que tout le monde n'ai plus de jetons
 
