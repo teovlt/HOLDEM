@@ -2,18 +2,24 @@ from Table import Table
 from Player import Player
 
 
-# Les classes Card, Player, Table et Deck sont déjà implémentées.
-
 # Main function to execute the game
-def main():
-    print("Bienvenue au Texas Hold'em Poker!")
-
-    # Initialisation des joueurs
+def initPlayers():
     players = [
         Player(name=f"Joueur {i + 1}", chips=100) for i in range(3)
     ]
 
     # Demander nom du joueur et l'ajouter à l'array
+    name = input("Veuillez entrer votre nom: ")
+    main_player = Player(name=name, chips=100)
+    players.append(main_player)
+    return players
+
+
+def main():
+    print("Bienvenue au Texas Hold'em Poker!")
+
+    # Initialisation des joueurs
+    players = initPlayers()
 
     # Initialisation de la table et du paquet de cartes
     table = Table()
