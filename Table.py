@@ -25,8 +25,6 @@ class Table:
     - Si un seul joueur a des jetons restants.
     Retourne True si la partie est terminée, sinon False.
     """
-    def GameIsOver(self):
+    def is_game_over(self):
         remaining_players = [player for player in self.players if player.chips > 0]
-        if len(remaining_players) == 1:
-            return True
-        return False
+        return len(remaining_players) == 1

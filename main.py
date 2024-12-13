@@ -3,7 +3,7 @@ from Player import Player
 
 
 # Main function to execute the game
-def initPlayers():
+def init_players():
     players = [
         Player(name=f"Joueur {i + 1}", chips=100) for i in range(3)
     ]
@@ -19,7 +19,7 @@ def main():
     print("Bienvenue au Texas Hold'em Poker!")
 
     # Initialisation des joueurs
-    players = initPlayers()
+    players = init_players()
 
     # Initialisation de la table et du paquet de cartes
     table = Table()
