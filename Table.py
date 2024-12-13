@@ -1,5 +1,5 @@
 from Deck import Deck
-
+from treys import Evaluator
 
 class Table:
     def __init__(self):
@@ -28,3 +28,13 @@ class Table:
     def is_game_over(self):
         remaining_players = [player for player in self.players if player.chips > 0]
         return len(remaining_players) == 1
+
+    def best_hands(self):
+        evaluator = Evaluator()
+        evaluations = []
+        for player in self.players:
+            if player.is_active:
+                evaluation_score = evaluator.evaluate(self.community_cards, player.hand)
+                evaluations.append({"player": player, "evaluation": evaluation_score})
+        best_player = max(evaluations, key=lambda x: x["evaluation"], default=None)
+        return best_player
