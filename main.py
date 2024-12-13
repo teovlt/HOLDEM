@@ -1,17 +1,39 @@
 from table import Table
 from player import Player
+import pandas as pd
 
 
 # Main function to execute the game
 def init_players():
-    players = [
-        Player(name=f"Joueur {i + 1}", chips=100) for i in range(3)
-    ]
 
-    # Demander nom du joueur et l'ajouter à l'array
-    player_name = input("Veuillez entrer votre nom: ")
-    main_player = Player(name=player_name, chips=100)
-    players.append(main_player)
+    # Demander le nombre de joueurs
+    while True:
+        try:
+            num_players = int(input("Combien de joueurs participeront à la partie ? "))
+            if num_players <= 0:
+                raise ValueError("Le nombre de joueurs doit être supérieur à 0.")
+            break
+        except ValueError as e:
+            print(e)
+
+    players = []
+
+    # Recueillir les noms des joueurs
+    for i in range(num_players):
+        while True:
+            player_name = input(f"Veuillez entrer le nom du Joueur {i + 1}: ").strip()
+            if player_name:
+                players.append(Player(name=player_name, chips=100))
+                break
+            else:
+                print("Le nom du joueur ne peut pas être vide.")
+
+    # Afficher un tableau des joueurs
+    players_data = [{"Nom": player.name, "Jetons": player.chips} for player in players]
+    df = pd.DataFrame(players_data)
+    print("\n--- Tableau des joueurs ---")
+    print(df.to_string(index=False))
+
     return players
 
 
@@ -30,7 +52,7 @@ def main():
         table.deck.shuffle()
         table.deal_to_players()
         table.community_cards = []
-        table.pot = 0
+        table.reset_pot()
 
         # Ajouter les cartes communautaires progressivement
         while len(table.community_cards) < 5:
@@ -40,8 +62,6 @@ def main():
             else:
                 # Turn et River: ajouter une carte à la fois
                 table.community_cards.extend(table.deck.draw(1))
-
-            print(f"Cartes communautaires: {table.community_cards}")
 
             # Effectuer les paris
             table.run_betting_round()
@@ -70,11 +90,8 @@ def main():
 
     # Fin du jeu
     print("\n--- Résultats ---")
-    winner = table.determine_winner()
-    if winner:
-        print(f"Le gagnant de la partie est {winner.name} avec {winner.chips} jetons!")
-    else:
-        print("Pas de gagnant, erreur dans la détermination du vainqueur.")
+    winner = table.players[0]
+    print(f"Le gagnant de la partie est {winner.name} avec {winner.chips} jetons!")
 
 
 if __name__ == "__main__":
