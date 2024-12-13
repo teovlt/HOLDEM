@@ -1,5 +1,6 @@
-from Deck import Deck
+from deck import Deck
 from treys import Evaluator
+
 
 class Table:
     def __init__(self):
@@ -20,16 +21,12 @@ class Table:
         # TODO: Implémenter la logique de détermination du gagnant
         pass
 
-    """
-    Vérifie si la partie est terminée :
-    - Si un seul joueur a des jetons restants.
-    Retourne True si la partie est terminée, sinon False.
-    """
-    def is_game_over(self):
-        remaining_players = [player for player in self.players if player.chips > 0]
-        return len(remaining_players) == 1
+    def run_betting_round(self):
 
-    def best_hands(self):
+        # TODO: Implémenter la logique de paris
+        pass
+
+    def has_best_hand(self):
         evaluator = Evaluator()
         evaluations = []
 
@@ -39,7 +36,7 @@ class Table:
                 evaluations.append({"player": player, "evaluation": evaluation_score})
 
         if not evaluations:
-            return []  
+            return []
 
         max_score = max(evaluations, key=lambda x: x["evaluation"])["evaluation"]
 
@@ -47,3 +44,8 @@ class Table:
         best_players = [entry["player"] for entry in evaluations if entry["evaluation"] == max_score]
         return best_players
 
+    def is_game_over(self):
+        return len([p for p in self.players if p.chips > 0]) <= 1
+
+    def remove_bankrupt_players(self):
+        self.players = [p for p in self.players if p.chips > 0]

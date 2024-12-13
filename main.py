@@ -1,5 +1,5 @@
-from Table import Table
-from Player import Player
+from table import Table
+from player import Player
 
 
 # Main function to execute the game
@@ -9,8 +9,8 @@ def init_players():
     ]
 
     # Demander nom du joueur et l'ajouter à l'array
-    name = input("Veuillez entrer votre nom: ")
-    main_player = Player(name=name, chips=100)
+    player_name = input("Veuillez entrer votre nom: ")
+    main_player = Player(name=player_name, chips=100)
     players.append(main_player)
     return players
 
@@ -24,35 +24,42 @@ def main():
     # Initialisation de la table et du paquet de cartes
     table = Table()
     table.players = players
-    table.deck.shuffle()
 
-    # Distribuer les cartes à chaque jouer
-    table.deal_to_players()
+    # Boucle principale du jeu
+    while not table.is_game_over():
+        table.deck.shuffle()
+        table.deal_to_players()
+        table.community_cards = []
 
-    # Plus grosse boucle qui attend que tout le monde n'ai plus de jetons
+        # Ajouter les cartes communautaires progressivement
+        while len(table.community_cards) < 5:
+            if len(table.community_cards) == 0:
+                # Flop: les 3 premières cartes
+                table.community_cards.extend(table.deck.draw(3))
+            else:
+                # Turn et River: ajouter une carte à la fois
+                table.community_cards.extend(table.deck.draw(1))
 
-    # TODO boucle du jeu
-    # Placer 3 cartes en milieu puis commencez les paris
-    # Sélectionner un premier joueur au hasard
-    # Le premier joueur peut soit parier soit au dodo
-    # Les joueurs suivant peuvent soient s'aligner soit au dodo
+            print(f"Cartes communautaires: {table.community_cards}")
 
-    # TOUR DU JOUEUR(si pas premier) : proposez 2 choix, s'aligner, se coucher et
-    # Afficher ses cartes en gros au dessus
-    # Si aligner, joueur suivant, sinon attendre la fin du tour
+            # Effectuer les paris
+            table.run_betting_round()
 
-    # A la fin du tour
+        # Déterminer le gagnant de la manche
+        winner = table.has_best_hand()
+        if winner:
+            print(f"{winner.name} remporte la manche avec {winner.chips} jetons!")
+        else:
+            print("Erreur dans la détermination du gagnant.")
 
-    # Affichage des cartes, méthode en affichant 3 puis 1 puis 1
-    # Et de meme jusqua la fin
-    # La boucle s'arrete lorsque il ne reste que un joueur en jeu ou si toutes les cartes sont révélés et que tt le monde a parié
-    # Dans ce cas la somme va a celui qui a la meilleure combinaison
+        # Éliminer les joueurs sans jetons
+        table.remove_bankrupt_players()
 
-    # Détermination du gagnant
+    # Fin du jeu
     print("\n--- Résultats ---")
     winner = table.determine_winner()
     if winner:
-        print(f"Le gagnant est {winner.name} avec {winner.chips} jetons!")
+        print(f"Le gagnant de la partie est {winner.name} avec {winner.chips} jetons!")
     else:
         print("Pas de gagnant, erreur dans la détermination du vainqueur.")
 
